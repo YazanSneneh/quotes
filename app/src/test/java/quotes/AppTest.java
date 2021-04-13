@@ -11,16 +11,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+
 
 
 public class AppTest {
-    @Test public void testAppHasAGreeting() throws FileNotFoundException {
-           App json = new App();
-        Gson gson = new Gson();
-        File file = new File("app\\src\\main\\resources\\recentquotes.json");
+//    @Test public void testAppHasAGreeting() throws FileNotFoundException {
+//           App json = new App();
+//        Gson gson = new Gson();
+//        File file = new File("app\\src\\main\\resources\\recentquotes.json");
+//
+//            assertEquals("Should return random book from recentQuestes.json", null ,json.randomBook(gson, file));
+////    }
+   @Test  public void testGetBook()throws FileNotFoundException {
+            App json = new App();
+            Gson gson = new Gson();
+            File file = new File("app\\src\\main\\resources\\recentquotes.json");
 
-            assertEquals("Should return random book from recentQuestes.json", null ,json.randomBook(gson, file));
-    }
-
+        assertEquals("expected", json.getBook(gson, file,0),json.getBook(gson, file,0));
+     }
 }

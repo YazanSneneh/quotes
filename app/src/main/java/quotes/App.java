@@ -9,30 +9,37 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.Random;
-
 
 public class App {
     public static void main(String[] args) throws FileNotFoundException {
         Gson gson = new Gson();
         File file = new File("app\\src\\main\\resources\\recentquotes.json");
 
+        Random number = new Random();
+
+
         System.out.println("Should return a random book from file");
         System.out.println(randomBook(gson, file));
     }
 
-
-
     public static String randomBook(Gson gson, File file) throws FileNotFoundException {
-
             Reader reader = new FileReader(file);
             Book[] books = gson.fromJson( reader, Book[].class);
 
-            Random number = new Random();
-            int idx = number.nextInt(books.length);
+             Random number = new Random();
+             int idx = number.nextInt(books.length);
 
             String newBook = ""+books[idx];
+
+        return newBook;
+    }
+
+ public String getBook(Gson gson, File file,int idx) throws FileNotFoundException {
+        Reader reader = new FileReader(file);
+        Book[] books = gson.fromJson( reader, Book[].class);
+
+        String newBook = ""+books[idx];
 
         return newBook;
     }

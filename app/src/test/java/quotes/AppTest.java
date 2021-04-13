@@ -13,21 +13,17 @@ import java.io.FileNotFoundException;
 import static org.junit.Assert.assertEquals;
 
 
-
-
 public class AppTest {
-//    @Test public void testAppHasAGreeting() throws FileNotFoundException {
-//           App json = new App();
-//        Gson gson = new Gson();
-//        File file = new File("app\\src\\main\\resources\\recentquotes.json");
-//
-//            assertEquals("Should return random book from recentQuestes.json", null ,json.randomBook(gson, file));
-////    }
-   @Test  public void testGetBook()throws FileNotFoundException {
-            App json = new App();
-            Gson gson = new Gson();
-            File file = new File("app\\src\\main\\resources\\recentquotes.json");
+    App json = new App();
+    Gson gson = new Gson();
+    File file = new File("src\\main\\resources\\recentquotes.json");
 
-        assertEquals("expected", json.getBook(gson, file,0),json.getBook(gson, file,0));
+
+
+//    @Test public void testAppHasAGreeting() throws FileNotFoundException {
+//        assertEquals("expected book in index 0:", json.randomBook(gson, file), json.randomBook(gson, file));
+//    }
+   @Test public void testGetBook()throws FileNotFoundException {
+         assertEquals("expected book in index 0:", json.getBook(gson, file,0), json.getBook(gson, file,0));
      }
 }

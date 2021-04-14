@@ -9,39 +9,62 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class App {
     public static void main(String[] args) throws FileNotFoundException {
         Gson gson = new Gson();
         File file = new File("app\\src\\main\\resources\\recentquotes.json");
-
+        File quoteFile = new File("app\\src\\main\\resources\\quotes.json");
         try {
             URL url = new URL("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en");
-
-            // here i will cast to http connection because it's doing url connection
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setRequestMethod("GET");
-
-            connection.addRequestProperty("User-Agent", "");
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-             String input = reader.readLine();
-                 while(input != null){
-                     System.out.println(input);
-                     input = reader.readLine();
-                 }
+            Quote randomQuote = gson.fromJson(makeHttpRequest(url), Quote.class);
 
 
-              reader.close();
-             connection.disconnect();
+            writeToBuffer(randomQuote, quoteFile, gson);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }catch (IOException io){
             System.out.println("Error : "+ io);
         }
+    }
 
+    public static void writeToBuffer(Quote quote, File file, Gson gson) throws IOException {
+        ArrayList<String> list = new ArrayList<>();
+        String randQuote = quote.toString();
+        list.add(randQuote.toString());
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(gson.toJson(list));
+
+        writer.close();
+
+    }
+
+    public static String makeHttpRequest(URL url) throws IOException {
+        // here i will cast to http connection because it's doing url connection
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("GET");
+
+        connection.addRequestProperty("User-Agent", "");
+
+        InputStream inputStream = connection.getInputStream();
+        InputStreamReader streamReader = new InputStreamReader(inputStream);
+        BufferedReader reader = new BufferedReader(streamReader);
+
+        StringBuilder builder = new StringBuilder();
+        String input = reader.readLine();
+
+        while(input !=null){
+            builder.append(input);
+            input = reader.readLine();
+        }
+
+        reader.close();
+        connection.disconnect();
+        return  builder.toString();
     }
 
     public static String randomBook(Gson gson, File file) throws FileNotFoundException {
@@ -55,14 +78,14 @@ public class App {
 
         return newBook;
     }
-
- public String getBook(Gson gson, File file,int idx) throws FileNotFoundException {
-        Reader reader = new FileReader(file);
-        Book[] books = gson.fromJson( reader, Book[].class);
-
-        String newBook = ""+books[idx];
-
-        return newBook;
-    }
+//
+// public String getBook(Gson gson, File file,int idx) throws FileNotFoundException {
+//        Reader reader = new FileReader(file);
+//        Book[] books = gson.fromJson( reader, Book[].class);
+//
+//        String newBook = ""+books[idx];
+//
+//        return newBook;
+//    }
 }
 

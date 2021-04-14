@@ -5,10 +5,10 @@ package quotes;
 
 import com.google.gson.Gson;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
 
 public class App {
@@ -16,11 +16,32 @@ public class App {
         Gson gson = new Gson();
         File file = new File("app\\src\\main\\resources\\recentquotes.json");
 
-        Random number = new Random();
+        try {
+            URL url = new URL("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en");
+
+            // here i will cast to http connection because it's doing url connection
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+
+            connection.addRequestProperty("User-Agent", "");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+             String input = reader.readLine();
+                 while(input != null){
+                     System.out.println(input);
+                     input = reader.readLine();
+                 }
 
 
-        System.out.println("Should return a random book from file");
-        System.out.println(randomBook(gson, file));
+              reader.close();
+             connection.disconnect();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }catch (IOException io){
+            System.out.println("Error : "+ io);
+        }
+
     }
 
     public static String randomBook(Gson gson, File file) throws FileNotFoundException {
